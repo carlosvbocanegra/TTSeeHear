@@ -1,0 +1,25 @@
+°Introducción
+-Protocolo (Problema, justificación, propuesta de solución)
+-Objetivos
+-Metodología
+°Marco Teórico
+-Imágenes
+-Patrones/Red
+-Teoría musical
+°Bosquejo general
+-Requerimientos funcionales y no funcionales
+-Arquitectura
+-Descripción general de los bloques
+°Prototipo 1 Análisis de Emociones diagrama de procesos (red neuronal)
+
+
+Pruebas:
+nombre
+objetivos
+requerimientos
+entrada
+salida
+descripción de los resultados
+
+
+No generalizar que la clasificación de flicker es mundial

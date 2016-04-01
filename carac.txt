@@ -1,0 +1,9 @@
+    Atributo path fill: Valor de texto el cual posee las características de color así como la definición de formas basada en las especificaciones de un documento SVG. 
+
+    Formas: El formato de gráficos vectoriales agrupa formas las cuales tienen en común poseer el mismo valor de color en el formato de mapa de bits
+
+        Características de Wang: Histogramas especialmente diseñados para expresar el impacto emocional de las imágenes (Wang, 2005). 
+
+    Estadísticas de área: basadas en características de Wang clasificadas en área de mucha, poca y mediana obscuridad y saturación.
+
+    Características basadas en wavelets: usadas para medir la suavidad/dureza espacial en las imágenes mediante la transformada ondícula de Daubechies en todos los canales de color.

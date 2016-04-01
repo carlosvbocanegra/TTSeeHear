@@ -1,0 +1,47 @@
+# ------------------NEW ---------------------------------#
+
+#notes = ("\\absolute c1 ","\\absolute e2 ","\\absolute g2 ","\\absolute d8 ","\\absolute f8 ","\\absolute a8 ","\\absolute b8 ", "\\absolute cis16 ", "\\absolute dis16 ", "\\absolute eis16 ", "\\absolute fis16 ", "\\absolute gis16 ", "\\absolute ais16 ")
+#notes = ("\\absolute c1 ","\\absolute e2 ","\\absolute g2 ","\\absolute d8 ","\\absolute f8 ","\\absolute a8 ","\\absolute b8 ", "c'8 ", "d' d8 ", "e'8 ", "f'8 ", "g'16 ", "a'8 ")
+#notes = ("c1 ","e2 ","g2 ","d8 ","f8 ","a8 ","b8 ", "c'8 ", "d' d8 ", "e'8 ", "f'8 ", "g'16 ", "a'8 ")
+notes = ("c1 ","c2 ", "c4 ", "c8 ","r2 ","e1 ","e2 ","e4 ","e8 ","r4 ","g1 ","g2 ","g4 ","g8 ","r4 ","d1 ","d2 ","d4 ","d8 ","r8 ","f1 ","f2 ","f4 ","f8 ","r8 ","a1 ","a2 ","a4 ","a8 ","r8 ","b1 ","b2 ","b4 ","b8 ","r8 ")
+
+f = open ("melody.ly", "w")
+
+upper_staff = ""
+lower_staff = ""
+instrument = 0
+
+for region in regiones:
+	for color in region:
+		if instrument == 0:
+			upper_staff+=notes[color]
+			instrument = 1
+		else:
+			lower_staff+=notes[color]
+			instrument = 0
+
+
+
+staff = "\\score{\n << \\new Staff \n\set Staff.instrumentName = #\"Piano  \"\n"
+#staff +="\\set Staff.midiInstrument = #\"piano\"\n"
+staff += "  {\\key g \major \clef treble " + upper_staff + "}\n"
+
+staff +=" \\new Staff \n\\with {midiInstrument = #\"cello\"}  \"\n"
+staff += "  {\\key g \major \clef treble " + lower_staff + "}\n"
+
+staff += ">>\n\layout{ }\n\midi {}\n}\n"
+
+title = """\n\\version "2.18.2"\n\header\n {
+  title = "TT SEE-HEAR"
+  composer = "Python"
+  tagline = "Copyright: -"
+}"""
+
+f.write (title + staff)
+#print title + staff
+
+f.close()
+
+call(["lilypond","melody.ly"])
+#call(["timidity","melody.midi"])
+
