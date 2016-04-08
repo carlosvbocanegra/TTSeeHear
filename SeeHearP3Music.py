@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import imageData as im
+import imageDataBrill as im
 import musicDictionary as md
 from subprocess import call
 import numpy as np
@@ -12,7 +12,7 @@ import itertools
 #notes = ("c1 ","e2 ","g2 ","d8 ","f8 ","a8 ","b8 ", "c'8 ", "d' d8 ", "e'8 ", "f'8 ", "g'16 ", "a'8 ")
 #notes = ("c1 ","c2 ", "c4 ", "c8 ","r2 ","e1 ","e2 ","e4 ","e8 ","r4 ","g1 ","g2 ","g4 ","g8 ","r4 ","d1 ","d2 ","d4 ","d8 ","r8 ","f1 ","f2 ","f4 ","f8 ","r8 ","a1 ","a2 ","a4 ","a8 ","r8 ","b1 ","b2 ","b4 ","b8 ","r8 ")
 
-mode = 6
+mode = 3
 
 scale = 5
 
@@ -37,14 +37,48 @@ upper_staff = ""
 lower_staff = ""
 instrument = 0
 
-#colors = itertools.chain(*regiones)
+colors = list(itertools.chain(*im.regiones))
+print colors
+
+colorIndex = 0
+bars = list()
+
+while colorIndex < len(colors):
+	tempColor = colors[colorIndex:colorIndex+7]
+	tempHues = list()
+	for i in tempColor:
+		tempHues.append(im.hues[i])
+	stdHue = np.std(tempHues)
+	print "stdHue:", stdHue
+	dynamic = int(stdHue/22.5)
+	print "Dynamic: ", dynamic
+	colorIndex = colorIndex + dynamic +1
+	if colorIndex >= len(colors):
+			dynamic = dynamic - (colorIndex - len(colors))
+			print "dynamic", dynamic
+	bars.append(md.rhythm[dynamic][0])
+	print md.rhythm[dynamic][0]
+	print "color Index:", colorIndex
 
 
+for i in bars:
+	print i, "\n"
 
+print "color Index:", colorIndex
 
-for region in im.regiones:	
-	for color in region:
+print "bars len:", len(list(itertools.chain(*bars)))
+print "colors len:", len(colors)
+
+colorIndex = 0
+finalBars = list()
+
+for bar in bars:
+	tempBar = list()
+	for i in range(len(bar)):
 		index = 0
+		color = colors[colorIndex]
+		colorIndex+=1
+		print "aquicolorIndex: ", colorIndex
 		if color <=2:
 			index=0
 		elif color <=3:
@@ -55,15 +89,46 @@ for region in im.regiones:
 			index=3
 		else:
 			index=color-4
-		if instrument == 0:
-			upper_staff+=notes[index]+" "
-			instrument = 1
-		else:
-			lower_staff+=notes[index]+" "
-			instrument = 0
+		tempBar.append(notes[index]+str(bar[i])+" ")
+	finalBars.append(tempBar)
 
-if im.lumAverage < 0.225:
-	tempo = 40
+print "FinalBars len:", len(finalBars)
+print "FinalBars len:", len(list(itertools.chain(*finalBars)))
+for bar in finalBars:
+	if instrument == 0:
+		for note in bar:
+			upper_staff+=note
+		instrument = 1	
+	else:
+		for note in bar:
+			lower_staff+=note
+		instrument = 0
+	print bar
+
+
+
+# for region in im.regiones:	
+# 	for color in region:
+# 		index = 0
+# 		if color <=2:
+# 			index=0
+# 		elif color <=3:
+# 			index=1
+# 		elif color <=5:
+# 			index=2
+# 		elif color <=7:
+# 			index=3
+# 		else:
+# 			index=color-4
+# 		if instrument == 0:
+# 			upper_staff+=notes[index]+" "
+# 			instrument = 1
+# 		else:
+# 			lower_staff+=notes[index]+" "
+# 			instrument = 0
+
+if im.lumAverage < 0.3:
+	tempo = 60
 else:
 	tempo = im.lumAverage*200
 
