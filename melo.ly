@@ -8,10 +8,17 @@
 }\score{
  << \new Staff 
 \set Staff.instrumentName = #"Piano  "
-  {\tempo 4 = 88 \clef treble bes4 r4 bes8 a8 r8 d8 e2 c8 g8 f8 f8 f2 c4 bes8 d8 bes4 f4 e8 bes8 f8 d8 g4 c4 d8 bes8 bes8 d8 a2 f4 d8 g8 g2 c4 f8 bes8 g2 bes8 e8 c8 f8 r2 bes8 f8 r8 bes8 a4 f4 e8 d8 r8 bes8 bes2 f8 g8 c8 f8 a2 d8 f8 r8 e8 bes4 r4 f8 d8 e8 c8 f4 bes4 a8 d8 r8 bes8 a4 c4 f8 r8 e8 d8 bes2 g8 c8 d8 bes8 bes2 f8 d8 g8 c8 f4 r4 e8 r8 bes8 d8 g2 bes4 d8 r8 f2 g8 c8 e8 r8 r2 d2 }
+  {\tempo 4 = 60 \clef treble ees1 r2 g2 c2 ees2 bes2 ees2 ees2 ees2 r2 aes2 g1 d2 ees2 r1 g2 ees2 f1 ees1 ees1 ees1 r1 ees1 r2 ees2 c2 bes2 g2 g2 c2 aes2 ees1 g1 bes1 bes1 ees1 aes2 ees2 c2 ees2 bes1 r1 g1 r1 bes1 ees1 g1 ees2 bes2 r2 aes2 ees2 aes2 c2 g2 f1 ees2 bes2 c2 r2 bes1 bes1 ees1 r1 bes1 g1 f1 g1 r1 }
  \new Staff 
-\with {midiInstrument = #"lead 1 (square)"}  
-  {\clef treble f4 r4 e8 c8 g8 bes8 r4 bes4 d8 bes8 r8 bes8 g2 r8 a8 r8 d8 bes2 r8 a8 r8 bes8 f2 r8 e8 r8 r8 bes4 e4 bes8 d8 r8 f8 r2 a8 r8 bes8 f8 d4 d4 r8 bes8 a8 r8 d2 r8 bes8 g8 c8 a2 r8 d8 r8 bes8 e4 r4 d8 r8 r8 bes8 d2 g8 bes8 c8 f8 g2 r4 bes4 d2 r8 r8 bes8 f8 bes2 bes8 g8 bes8 f8 f4 r4 e8 r8 a8 r8 bes2 d4 a8 r8 bes2 r4 e8 c8 a2 f8 f8 bes8 bes8 f4 bes4 bes8 d8 r8 a8 }
+\with {midiInstrument = #"cello"}  
+  {\clef treble ees2 bes2 bes2 r2 r2 bes2 r2 c2 r2 r2 c2 ees2 bes1 r1 g1 bes1 bes1 r1 bes1 bes1 r1 g2 ees2 bes2 r2 r2 ees2 f2 r2 r1 ees1 d1 ees1 r1 g2 r2 g2 f2 ees1 bes1 ees1 g1 ees1 ees1 bes1 bes1 ees2 r2 c2 g2 r2 g2 ees1 ees2 g2 g2 f2 r1 ees1 bes1 ees1 r2 ees2 g1 ees1 g1 f1 }
+ \new Staff 
+\with {midiInstrument = #"string ensemble 1"}  
+  {\clef treble bes1 ees1 aes1 f1 g1 c1 d1 f1 ees1 d1 f1 ees1 c1 c1 c1 c1 g1 aes1 bes1 aes1 bes1 d1 g1 g1 g1 aes1 aes1 d1 c1 bes1 bes1 g1 bes1 ees1 ees1 f1 c1 ees1 d1 ees1 c1 g1 d1 c1 ees1 d1 bes1 c1 d1 ees1 }
+
+  \new Staff 
+\set Staff.instrumentName = #"Piano  "
+  { 
 >>
 \layout{}
 \midi{}

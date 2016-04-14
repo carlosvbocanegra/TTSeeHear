@@ -5,16 +5,11 @@ import musicDictionary as md
 from subprocess import call
 import numpy as np
 import itertools
+import contrapunto as cp
 # ------------------NEW ---------------------------------#
+mode = 0
 
-#notes = ("\\absolute c1 ","\\absolute e2 ","\\absolute g2 ","\\absolute d8 ","\\absolute f8 ","\\absolute a8 ","\\absolute b8 ", "\\absolute cis16 ", "\\absolute dis16 ", "\\absolute eis16 ", "\\absolute fis16 ", "\\absolute gis16 ", "\\absolute ais16 ")
-#notes = ("\\absolute c1 ","\\absolute e2 ","\\absolute g2 ","\\absolute d8 ","\\absolute f8 ","\\absolute a8 ","\\absolute b8 ", "c'8 ", "d' d8 ", "e'8 ", "f'8 ", "g'16 ", "a'8 ")
-#notes = ("c1 ","e2 ","g2 ","d8 ","f8 ","a8 ","b8 ", "c'8 ", "d' d8 ", "e'8 ", "f'8 ", "g'16 ", "a'8 ")
-#notes = ("c1 ","c2 ", "c4 ", "c8 ","r2 ","e1 ","e2 ","e4 ","e8 ","r4 ","g1 ","g2 ","g4 ","g8 ","r4 ","d1 ","d2 ","d4 ","d8 ","r8 ","f1 ","f2 ","f4 ","f8 ","r8 ","a1 ","a2 ","a4 ","a8 ","r8 ","b1 ","b2 ","b4 ","b8 ","r8 ")
-
-mode = 3
-
-scale = 5
+scale = 3
 
 if mode == 0:
 	notes = (md.scales[scale][0],'r',md.scales[scale][4],md.scales[scale][2],'r',md.scales[scale][1],md.scales[scale][3],'r',md.scales[scale][5],md.scales[scale][6])
@@ -31,14 +26,53 @@ elif mode == 5:
 elif mode == 6:
 	notes = (md.scales[scale][6],'r',md.scales[scale][3],md.scales[scale][1],'r',md.scales[scale][0],md.scales[scale][2],'r',md.scales[scale][4],md.scales[scale][5])
 
-f = open ("melo3.ly", "w")
+intervalsEquivalent = {
+	0:1,
+	2:5,
+	3:3,
+	5:2,
+	6:4,
+	8:6,
+	9:7
+}
+
+fooxEquivalent = {
+	'c':0,
+	'd':5,
+	'e':3,
+	'f':6,
+	'g':2,
+	'a':8,
+	'b':9
+}
+
+def getFooxInput(cantusFirmus):
+	fooxInput = ""
+	for note in cantusFirmus:
+		fooxInput += str(intervalsEquivalent[note] + 3)+ " "
+	return fooxInput
+
+
+def convertFooxOutput(contrapunto):
+	auxcount = 0
+	contrapunto_staff = ""
+	for note in contrapunto:
+		if note == '\'' or note == '1' or note == 'i' or note == 's' or note == ' ':
+			continue
+		else:
+			auxcount +=1
+			contrapunto_staff += notes[fooxEquivalent[note]] + '1 '
+	print "auxcount: ", auxcount
+	return contrapunto_staff
+
+f = open ("melo.ly", "w")
 
 upper_staff = ""
 lower_staff = ""
 instrument = 0
 
 colors = list(itertools.chain(*im.regiones))
-print colors
+#print colors
 
 colorIndex = 0
 bars = list()
@@ -49,28 +83,32 @@ while colorIndex < len(colors):
 	for i in tempColor:
 		tempHues.append(im.hues[i])
 	stdHue = np.std(tempHues)
-	print "stdHue:", stdHue
+	#print "stdHue:", stdHue
 	dynamic = int(stdHue/22.5)
-	print "Dynamic: ", dynamic
+	#print "Dynamic: ", dynamic
 	colorIndex = colorIndex + dynamic +1
 	if colorIndex >= len(colors):
 			dynamic = dynamic - (colorIndex - len(colors))
-			print "dynamic", dynamic
+			#print "dynamic", dynamic
 	bars.append(md.rhythm[dynamic][0])
-	print md.rhythm[dynamic][0]
-	print "color Index:", colorIndex
+	#print md.rhythm[dynamic][0]
+	#print "color Index:", colorIndex
 
 
-for i in bars:
-	print i, "\n"
+#for i in bars:
+	#print i, "\n"
 
-print "color Index:", colorIndex
+#print "color Index:", colorIndex
 
-print "bars len:", len(list(itertools.chain(*bars)))
-print "colors len:", len(colors)
+#print "bars len:", len(list(itertools.chain(*bars)))
+#print "colors len:", len(colors)
 
 colorIndex = 0
 finalBars = list()
+
+mainMelodyFlag = 0
+soundNoteFlag = 0
+cantusFirmus = list()
 
 for bar in bars:
 	tempBar = list()
@@ -78,7 +116,7 @@ for bar in bars:
 		index = 0
 		color = colors[colorIndex]
 		colorIndex+=1
-		print "aquicolorIndex: ", colorIndex
+		#print "aquicolorIndex: ", colorIndex
 		if color <=2:
 			index=0
 		elif color <=3:
@@ -90,12 +128,31 @@ for bar in bars:
 		else:
 			index=color-4
 		tempBar.append(notes[index]+str(bar[i])+" ")
+		#Preparación de la entrada del AG foox
+		#Se toma solo la primera nota (i) del primer instrumento (mainMelodyFlag)
+		if mainMelodyFlag == 0 and soundNoteFlag == 0:
+			if notes[index] == 'r' and i == len(bar)-1:
+				cantusFirmus.append(0)
+				print str(tempBar)
+				soundNoteFlag = 1
+			elif notes[index] == 'r':
+				continue
+			else:
+				cantusFirmus.append(index)
+				print str(tempBar)
+				soundNoteFlag = 1
 	finalBars.append(tempBar)
+	if mainMelodyFlag == 0:
+		mainMelodyFlag = 1
+	elif mainMelodyFlag == 1:
+		mainMelodyFlag = 0
+	soundNoteFlag = 0
 
 print "FinalBars len:", len(finalBars)
-print "FinalBars len:", len(list(itertools.chain(*finalBars)))
+#print "FinalBars len:", len(list(itertools.chain(*finalBars)))
 for bar in finalBars:
 	if instrument == 0:
+		print bar
 		for note in bar:
 			upper_staff+=note
 		instrument = 1	
@@ -103,52 +160,34 @@ for bar in finalBars:
 		for note in bar:
 			lower_staff+=note
 		instrument = 0
-	print bar
+	#print bar
 
 
+print "cantusFirmus", cantusFirmus
+print "Cantus Firmus len:", len(cantusFirmus)
 
-# for region in im.regiones:	
-# 	for color in region:
-# 		index = 0
-# 		if color <=2:
-# 			index=0
-# 		elif color <=3:
-# 			index=1
-# 		elif color <=5:
-# 			index=2
-# 		elif color <=7:
-# 			index=3
-# 		else:
-# 			index=color-4
-# 		if instrument == 0:
-# 			upper_staff+=notes[index]+" "
-# 			instrument = 1
-# 		else:
-# 			lower_staff+=notes[index]+" "
-# 			instrument = 0
+exactLoop = int(len(cantusFirmus)/10)
+print "Exact Loop:", exactLoop
+
+contrapunto_staff = ""
+
+for it in range(exactLoop):
+	if it == exactLoop-1:
+		fooxInput = getFooxInput(cantusFirmus[it*10:])
+	else:
+		fooxInput = getFooxInput(cantusFirmus[it*10:(it+1)*10])
+	call ("foox -s 1 -cf "+ fooxInput, shell=True)
+	cpf = open("contrapunto.txt", 'r')
+	contrapunto = cpf.read()
+	contrapunto_staff += convertFooxOutput(contrapunto)
+	cpf.close()
+
 
 if im.lumAverage < 0.3:
 	tempo = 60
 else:
 	tempo = im.lumAverage*200
 
-
-#print tempo
-# if im.lumAverage <= 0.20:
-# #Lento (45-60)
-# 	tempo = im.lumAverage*300
-# elif im.lumAverage <= 0.40:
-# #Adagio (66 - 76)
-# 	tempo = im.lumAverage*190
-# elif im.lumAverage <= 0.60:
-# #Andante (76-108)
-# 	tempo = 
-# elif im.lumAverage <= 0.80:
-# #Allegro (120-168)
-# 	tempo = "Allegro"
-# elif im.lumAverage <= 1:
-# #Presto (168-200)
-# 	tempo = "Presto"
 
 instrument = ""
 #Instruments:
@@ -185,6 +224,9 @@ staff += "  {\\tempo 4 = "+str(int(tempo))+" \\clef treble " + upper_staff + "}\
 staff +=" \\new Staff \n\\with {midiInstrument = #\""+instrument+"\"}  \n"
 staff += "  {\\clef treble " + lower_staff + "}\n"
 
+staff +=" \\new Staff \n\\with {midiInstrument = #\""+"string ensemble 1"+"\"}  \n"
+staff += "  {\\clef treble " + contrapunto_staff + "}\n"
+
 staff += ">>\n\\layout{}\n\\midi{}\n}\n"
 
 title = """\n\\version "2.18.2"\n\\header\n {
@@ -198,6 +240,9 @@ f.write (title + staff)
 
 f.close()
 
-call(["lilypond","melo3.ly"])
-call(["timidity","melo3.midi"])
+call(["lilypond","melo.ly"])
+#call(["timidity","melo.midi"])
+
+
+
 

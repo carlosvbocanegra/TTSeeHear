@@ -1,19 +1,19 @@
 """
-This module encapsulates the behaviour of first species counterpoint.
+This module encapsulates the behaviour of fourth species counterpoint.
 """
 import random
 
 import foox.ga as ga
-from utils import is_parallel, make_generate_function
+from utils import is_parallel, make_generate_function, is_suspension
 
 
 # Some sane defaults.
 DEFAULT_POPULATION_SIZE = 1000
 DEFAULT_MAX_GENERATION = 100
-DEFAULT_MUTATION_RANGE = 7
+DEFAULT_MUTATION_RANGE = 9 
 DEFAULT_MUTATION_RATE = 0.4
 
-# Intervals between notes that are allowed in first sepcies counterpoint.
+# Intervals between notes that are allowed in fourth sepcies counterpoint.
 VALID_INTERVALS = [2, 4, 5, 7, 9, 11]
 
 # Various rewards and punishments used with different aspects of the solution.
@@ -41,14 +41,8 @@ PUNISH_PENULTIMATE_PREPARATION = 0.7
 PUNISH_PARALLEL_FIFTHS_OCTAVES = 0.5
 # Punishment for too many repeated notes.
 PUNISH_REPEATS = 0.1
-# Punishment for too many parallel thirds
-PUNISH_THIRDS = 0.1
-# Punishment for too many parallel sixths.
-PUNISH_SIXTHS = 0.1
-# Punishment for too many parallel/similar movements.
-PUNISH_PARALLEL = 0.1
-# Punishment for too many large leaps in the melody.
-PUNISH_LEAPS = 0.1
+# Reward for a valid suspension.
+REWARD_SUSPENSION = 1.0
 
 # The highest score a candidate solution may achieve. (Hack!)
 MAX_REWARD = (REWARD_FIRST + REWARD_LAST + REWARD_LAST_STEP +
@@ -60,7 +54,6 @@ def create_population(number, cantus_firmus):
     Will create a new list of random candidate solutions of the specified
     number given the context of the cantus_firmus.
     """
-    print "Hola First 2"
     result = []
     for i in range(number):
         new_chromosome = []
@@ -153,8 +146,9 @@ def make_fitness_function(cantus_firmus):
         solution = zip(contrapunctus, cantus_firmus)
         last_notes = solution.pop()
         last_interval = last_notes[0] - last_notes[1]
-        for contrapunctus_note, cantus_firmus_note in solution[1:]:
-            current_notes = (contrapunctus_note, cantus_firmus_note)
+        for i in range(1, len(solution) - 2):
+            current_notes = solution[i]
+            contrapunctus_note, cantus_firmus_note = current_notes
             current_interval = contrapunctus_note - cantus_firmus_note
 
             # Punish parallel fifths or octaves.
@@ -166,22 +160,9 @@ def make_fitness_function(cantus_firmus):
             if contrapunctus_note == last_notes[0]:
                 repeats += 1
 
-            # Check for parallel thirds.
-            if current_interval == 2 and last_interval == 2:
-                thirds += 1
-
-            # Check for parallel sixths.
-            if current_interval == 4 and last_interval == 4:
-                sixths += 1
-
-            # Check for parallel motion.
-            if is_parallel(last_notes, current_notes):
-                parallel_motion += 1
-
-            # Check the melodic contour.
-            contour_leap = abs(current_notes[0] - last_notes[0])
-            if contour_leap > 2:
-                jump_contour += contour_leap - 2
+            # Check for a suspension.
+            if is_suspension(contrapunctus, i, cantus_firmus):
+                fitness_score += REWARD_SUSPENSION
 
             last_notes = current_notes
             last_interval = current_interval
@@ -190,22 +171,6 @@ def make_fitness_function(cantus_firmus):
         if repeats > repeat_threshold:
             fitness_score -= PUNISH_REPEATS
 
-        # Punish too many (> 1/3) parallel thirds
-        if thirds > repeat_threshold:
-            fitness_score -= PUNISH_THIRDS
-
-        # Punish too many (> 1/3) parallel sixths.
-        if sixths > repeat_threshold:
-            fitness_score -= PUNISH_SIXTHS
-
-        # Punish too many (> 1/3) parallel movements.
-        if parallel_motion > repeat_threshold:
-            fitness_score -= PUNISH_PARALLEL
-
-        # Punish too many large leaps in the melody.
-        if jump_contour > jump_threshold:
-            fitness_score -= PUNISH_LEAPS
-
         genome.fitness = fitness_score
 
         return fitness_score
@@ -213,21 +178,33 @@ def make_fitness_function(cantus_firmus):
     return fitness_function
 
 
-def halt(population, generation_count):
+def make_halt_function(cantus_firmus):
     """
-    Given a population of candidate solutions and generation count (the number
-    of epochs the algorithm has run) will return a boolean to indicate if an
-    acceptable solution has been found within the referenced population.
+    Returns a halt function for the given cantus firmus.
     """
-    # All four required fingerprints exist in a solution that has not been
-    # punished by for over-use of thirds, sixths, parallel motion etc.
-    return (population[0].fitness >= MAX_REWARD or
-        generation_count > DEFAULT_MAX_GENERATION)
+
+    def halt(population, generation_count):
+        """
+        Given a population of candidate solutions and generation count (the
+        number of epochs the algorithm has run) will return a boolean to
+        indicate if an acceptable solution has been found within the referenced
+        population.
+        """
+        fittest = population[0].chromosome
+        suspensions = 0
+        for i in range(1, len(fittest) - 2):
+            # Check for a suspension.
+            if is_suspension(fittest, i, cantus_firmus):
+                suspensions += 1
+        return (population[0].fitness >= MAX_REWARD + suspensions or
+            generation_count > DEFAULT_MAX_GENERATION)
+
+    return halt
 
 
 class Genome(ga.Genome):
     """
-    A class to represent a candidate solution for first species counterpoint.
+    A class to represent a candidate solution for fourth species counterpoint.
     """
 
     def mutate(self, mutation_range, mutation_rate, context):

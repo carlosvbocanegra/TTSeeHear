@@ -1,0 +1,54 @@
+------------Para SeeHearP3 (Image)-------
+* OpenCV
+https://jjyap.wordpress.com/2014/05/24/installing-opencv-2-4-9-on-mac-osx-with-python-support/
+(cuidar referencias a python)
+
+* numpy
+https://penandpants.com/2012/02/24/install-python/
+
+* PIL (o pillow)
+pip install pil
+ó
+pip install pillow
+
+* matplotlib
+brew install pkg-config
+pip install matplotlib
+
+https://penandpants.com/2012/02/24/install-python/
+
+* subprocess
+Checar que lilypond y timidity estén instalados y agregados al PATH
+
+-------------Para SeeHearP3 (Music)--------
+*Lilypond
+http://lilypond.org/doc/v2.16/Documentation/web/macos-x.en.html
+Instalar y seguir pasos para agregar a línea de comandos
+
+*timidity
+Descargar timidity++ (INSTALL file)
+Crear archivo de configuración
+
+/usr/local/share/timidity/timidity.cfg
+
+Con los siguiente:
+
+soundfont /Users/carlosvega/Downloads/sound/sounds.sf2
+
+donde sounds.sf2 se obtiene de:
+http://www.mediafire.com/download/6u6x2j6iw0azqet/Timbres+Of+Heaven+GM_GS_XG_SFX+V+3.0+Final+%21%21%21.7z
+
+*Foox
+Ubuntu...................................................
+Modificar archivos (ga.py, first.py) en 
+foox-master/build/lib/foox/ga.py
+foox-master/build/lib/foox/species/first.py
+
+Modificar foox en /build/scripts-2.7/foox
+
+Hacer cambios y correr sudo python setup.py install desde foox-master
+...........................................................
+
+Mac........................................
+Modificar archivos (ga.py, first.py) en /Library/Python/2.7/foox/
+Modificar foox en /usr/Local/bin

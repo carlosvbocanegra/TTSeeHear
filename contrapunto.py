@@ -1,0 +1,1 @@
+contrapunto = "g'' 1 a' c'' a' g' c'' a' b' b' c'' f'' c'' c'' e'' c'' e'' a' a' b' b' c'' c'' b' d'' cis'' d''"

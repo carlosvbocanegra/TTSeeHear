@@ -12,7 +12,7 @@ from subprocess import call
 
 import musicDictionary
 
-img = cv2.imread('lisa.jpg')
+img = cv2.imread('patagonia.jpg')
 Z = img.reshape((-1,3))
 
 # convert to np.float32
@@ -164,7 +164,7 @@ autolabel(rects)
 plt.show()
 #"""
 
-image=Image.open("lisa.jpg")
+image=Image.open("patagonia.jpg")
 
 pixels = list(image.getdata())
 pixelsHsl = []
@@ -233,11 +233,11 @@ w = cv2.waitKey(0) & 0xFF # for 64-bit machine
 if w == 27:         # wait for ESC key to exit
     cv2.destroyAllWindows()
 elif w == ord('s'): # wait for 's' key to save and exit
-    cv2.imwrite('lisaKmeans.jpg', res2)
+    cv2.imwrite('patagoniaKmeans.jpg', res2)
 #"""   
 
 
-f = open ("imageDatalisa.py", "w")
+f = open ("imageDatapatagonia.py", "w")
 
 f.write ("hues = " + str(hues)+ "\n")
 f.write ("colores = " + str(colors)+ "\n")
