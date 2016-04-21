@@ -3,7 +3,7 @@
 
 \header {
     title = "Untitled"
-    subtitle = "Created on: Wed Apr 13 23:11:42 2016"
+    subtitle = "Created on: Wed Apr 20 21:05:40 2016"
     composer = "Anonymous and Foox"
 }
 
@@ -14,7 +14,7 @@ result = {
         \time 4/4
         \clef treble
         {
-            a'' 1 e'' b' a' c'' b' g' a' b' c''
+            g' 1 a' g' e' g' a' a' d'' d'' c'' e'' dis'' e''
         }
     }
     \new Staff
@@ -22,7 +22,7 @@ result = {
         \time 4/4
         \clef treble
         {
-            a' 1 g' g' c' c' g' e' d' e' c' \bar "|."
+            c' 1 c' e' c' e' c' c' b' f' c' g' g' e' \bar "|."
         }
     }
     >>

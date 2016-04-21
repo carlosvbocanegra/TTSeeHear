@@ -1,0 +1,26 @@
+Datos:
+
+birds.jpg - anticipación - melo1.wav https://drive.google.com/open?id=0B7ZgjTOUnl5Bd2VQaGtaT3hwMU0
+
+brill.jpg - optimismo - melo2.wav https://drive.google.com/open?id=0B7ZgjTOUnl5Bd19NS1Jlak9QUWM
+
+lisa.jpg - serenidad - melo3.wav https://drive.google.com/open?id=0B7ZgjTOUnl5BT3JvN3l1TFV4VTg
+
+preguntas:
+
+-----(con brill)
+qué tanto crees que coincide esta imágen con esta emoción
+
+-----(Con birds y con brill)
+con qué imagen relacionarías la siguiente melodía:
+(poner link de la melodía)
+(poner dos imágenes diferentes más la respuesta correcta)
+qué tan agradable te parece la melodía
+
+-----(Con lisa)
+La siguiente imagen está relacionada con la siguiente melodía...
+(poner imagen y link de la melodía)
+qué tanto crees que corresponde la velocidad de la melodía con la imagen
+qué tanto crees que corresponden los instrumentos utilizados en la melodía, con la imagen
+en general qué tanta relación crees que haya entre la melodía y la imagen
+qué tan agradable te parece la melodía

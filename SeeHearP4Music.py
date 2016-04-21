@@ -1,16 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import imageDatadark as im
+import imageDatared as im
 import musicDictionary as md
 from subprocess import call
 import numpy as np
 import itertools
 import contrapunto as cp
+import random as rd
 # ------------------NEW ---------------------------------#
-mode = 0
+mode = 6
 
-scale = 3
-
+#scale = int(im.avrHue/30)
+scale = 0
+print "Scale: ", scale
 if mode == 0:
 	notes = (md.scales[scale][0],'r',md.scales[scale][4],md.scales[scale][2],'r',md.scales[scale][1],md.scales[scale][3],'r',md.scales[scale][5],md.scales[scale][6])
 elif mode == 1:	
@@ -46,6 +48,33 @@ fooxEquivalent = {
 	'b':9
 }
 
+def triadChordMaker(grade, scale):
+	chordNotes = list()
+	root = ""
+	third = ""
+	fifth = ""
+	baseScale = itertools.cycle(md.scales[scale]) #Ciclar la escala
+	for i in range(grade): #Avanzar hasta el grado deseado
+		root = baseScale.next()
+	for i in range(2):
+		third = baseScale.next()
+	for i in range(2):
+		fifth = baseScale.next()
+	chordNotes.append(root)
+	chordNotes.append(third)
+	chordNotes.append(fifth)
+	return chordNotes
+
+def regularChord(chordNotes, time):
+	chord = " <"+chordNotes[0]+" "+chordNotes[1]+" "+chordNotes[2]+">"+str(time)+" "
+	return chord
+
+def arpegioChord(chordNotes, time):
+	chord = " \\set tieWaitForNote = ##t "
+	chord += "\\grace { "+chordNotes[0]+"32 ~ "+chordNotes[1]+" ~ "+chordNotes[2]+" ~ "+chordNotes[0]+" ~ } "
+	chord +="<"+chordNotes[0]+" "+chordNotes[1]+" "+chordNotes[2]+" "+chordNotes[0]+">"+str(time)+" \\unset tieWaitForNote "
+	return chord
+
 def getFooxInput(cantusFirmus):
 	fooxInput = ""
 	for note in cantusFirmus:
@@ -65,7 +94,7 @@ def convertFooxOutput(contrapunto):
 	print "auxcount: ", auxcount
 	return contrapunto_staff
 
-f = open ("melo.ly", "w")
+f = open ("meloB.ly", "w")
 
 upper_staff = ""
 lower_staff = ""
@@ -90,13 +119,13 @@ while colorIndex < len(colors):
 	if colorIndex >= len(colors):
 			dynamic = dynamic - (colorIndex - len(colors))
 			#print "dynamic", dynamic
-	bars.append(md.rhythm[dynamic][0])
+	bars.append(md.rhythm[dynamic][rd.randrange(0,len(md.rhythm[dynamic]))])
 	#print md.rhythm[dynamic][0]
 	#print "color Index:", colorIndex
 
 
-#for i in bars:
-	#print i, "\n"
+for i in bars:
+	print i, "\n"
 
 #print "color Index:", colorIndex
 
@@ -182,6 +211,31 @@ for it in range(exactLoop):
 	contrapunto_staff += convertFooxOutput(contrapunto)
 	cpf.close()
 
+chords_staff = ""
+
+progression = itertools.cycle([mode+1,mode+1,5,5,4,4,mode+1,mode+1])
+
+chordBarsIndex = 0
+arpegioFlag = 0
+while chordBarsIndex < len(cantusFirmus):
+	grade = progression.next()
+	chordNotes = triadChordMaker(grade, scale)
+	rhythm = md.chordsrhythm[rd.randrange(0,2)]
+	if arpegioFlag == 0:
+		for time in rhythm:
+			chords_staff += regularChord(chordNotes, time)
+		arpegioFlag = rd.randrange(0,2)
+	else:
+		for time in rhythm:
+			chords_staff += arpegioChord(chordNotes, time)
+		arpegioFlag = 0
+	chordBarsIndex+=1
+
+#Ending cadence
+upper_staff += regularChord(triadChordMaker(5,scale),2) + regularChord(triadChordMaker(4,scale),2) + regularChord(triadChordMaker(mode+1,scale),1)
+chords_staff += regularChord(triadChordMaker(5,scale),2) + regularChord(triadChordMaker(4,scale),2) + regularChord(triadChordMaker(mode+1,scale),1)
+contrapunto_staff += md.scales[scale][4] + "2 " + md.scales[scale][3] + "2 " + md.scales[scale][mode] + "1 "
+
 
 if im.lumAverage < 0.3:
 	tempo = 60
@@ -219,13 +273,16 @@ elif im.satAverage <= 1:
 
 staff = "\\score{\n << \\new Staff \n\\set Staff.instrumentName = #\"Piano  \"\n"
 #staff +="\\set Staff.midiInstrument = #\"piano\"\n"
-staff += "  {\\tempo 4 = "+str(int(tempo))+" \\clef treble " + upper_staff + "}\n"
+staff += "  \\relative c'' {\\tempo 4 = "+str(int(tempo))+" \\clef treble " + upper_staff + "}\n"
 
 staff +=" \\new Staff \n\\with {midiInstrument = #\""+instrument+"\"}  \n"
 staff += "  {\\clef treble " + lower_staff + "}\n"
 
-staff +=" \\new Staff \n\\with {midiInstrument = #\""+"string ensemble 1"+"\"}  \n"
-staff += "  {\\clef treble " + contrapunto_staff + "}\n"
+staff +=" \\new Staff \n \\with {midiInstrument = #\""+"string ensemble 1"+"\"}  \n"
+staff += "  \\relative c' {\\clef treble " + contrapunto_staff + "}\n"
+
+staff +=" \\new Staff \n\\with {midiInstrument = #\""+"Acoustic Grand Piano"+"\"}  \n"
+staff += "  {\\clef bass " + chords_staff + "}\n"
 
 staff += ">>\n\\layout{}\n\\midi{}\n}\n"
 
@@ -240,8 +297,8 @@ f.write (title + staff)
 
 f.close()
 
-call(["lilypond","melo.ly"])
-#call(["timidity","melo.midi"])
+call(["lilypond","meloB.ly"])
+#call(["timidity","meloB.midi"])
 
 
 

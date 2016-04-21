@@ -8,17 +8,16 @@
 }\score{
  << \new Staff 
 \set Staff.instrumentName = #"Piano  "
-  {\tempo 4 = 60 \clef treble ees1 r2 g2 c2 ees2 bes2 ees2 ees2 ees2 r2 aes2 g1 d2 ees2 r1 g2 ees2 f1 ees1 ees1 ees1 r1 ees1 r2 ees2 c2 bes2 g2 g2 c2 aes2 ees1 g1 bes1 bes1 ees1 aes2 ees2 c2 ees2 bes1 r1 g1 r1 bes1 ees1 g1 ees2 bes2 r2 aes2 ees2 aes2 c2 g2 f1 ees2 bes2 c2 r2 bes1 bes1 ees1 r1 bes1 g1 f1 g1 r1 }
+  \relative c'' {\tempo 4 = 88 \clef treble c4 r4 c8 b8 r8 e8 f2 d8 a8 g8 g8 g2 d4 c8 e8 c4 g4 f8 c8 g8 e8 a4 d4 e8 c8 c8 e8 b2 g4 e8 a8 a2 d4 g8 c8 a2 c8 f8 d8 g8 r2 c8 g8 r8 c8 b4 g4 f8 e8 r8 c8 c2 g8 a8 d8 g8 b2 e8 g8 r8 f8 c4 r4 g8 e8 f8 d8 g4 c4 b8 e8 r8 c8 b4 d4 g8 r8 f8 e8 c2 a8 d8 e8 c8 c2 g8 e8 a8 d8 g4 r4 f8 r8 c8 e8 a2 c4 e8 r8 g2 a8 d8 f8 r8 r2 e2 }
  \new Staff 
-\with {midiInstrument = #"cello"}  
-  {\clef treble ees2 bes2 bes2 r2 r2 bes2 r2 c2 r2 r2 c2 ees2 bes1 r1 g1 bes1 bes1 r1 bes1 bes1 r1 g2 ees2 bes2 r2 r2 ees2 f2 r2 r1 ees1 d1 ees1 r1 g2 r2 g2 f2 ees1 bes1 ees1 g1 ees1 ees1 bes1 bes1 ees2 r2 c2 g2 r2 g2 ees1 ees2 g2 g2 f2 r1 ees1 bes1 ees1 r2 ees2 g1 ees1 g1 f1 }
+\with {midiInstrument = #"lead 1 (square)"}  
+  {\clef treble g4 r4 f8 d8 a8 c8 r4 c4 e8 c8 r8 c8 a2 r8 b8 r8 e8 c2 r8 b8 r8 c8 g2 r8 f8 r8 r8 c4 f4 c8 e8 r8 g8 r2 b8 r8 c8 g8 e4 e4 r8 c8 b8 r8 e2 r8 c8 a8 d8 b2 r8 e8 r8 c8 f4 r4 e8 r8 r8 c8 e2 a8 c8 d8 g8 a2 r4 c4 e2 r8 r8 c8 g8 c2 c8 a8 c8 g8 g4 r4 f8 r8 b8 r8 c2 e4 b8 r8 c2 r4 f8 d8 b2 g8 g8 c8 c8 g4 c4 c8 e8 r8 b8 }
  \new Staff 
 \with {midiInstrument = #"string ensemble 1"}  
-  {\clef treble bes1 ees1 aes1 f1 g1 c1 d1 f1 ees1 d1 f1 ees1 c1 c1 c1 c1 g1 aes1 bes1 aes1 bes1 d1 g1 g1 g1 aes1 aes1 d1 c1 bes1 bes1 g1 bes1 ees1 ees1 f1 c1 ees1 d1 ees1 c1 g1 d1 c1 ees1 d1 bes1 c1 d1 ees1 }
-
-  \new Staff 
-\set Staff.instrumentName = #"Piano  "
-  { 
+  {\clef treble g1 d1 g1 e1 a1 g1 e1 f1 g1 f1 c1 d1 c1 e1 f1 g1 c1 e1 c1 d1 e1 }
+ \new Staff 
+\with {midiInstrument = #"Acoustic Grand Piano"}  
+  {\clef treble  <g b d>2  <g b d>2  <g b d>4  <g b d>2.  <f a c>1  <f a c>2.  <f a c>4  <c e g>1  <c e g>1  <g b d>2  <g b d>2  <g b d>2  <g b d>2  <f a c>2  <f a c>2  <f a c>2.  <f a c>4  <c e g>2  <c e g>2  <c e g>2.  <c e g>4  <g b d>2  <g b d>2  <g b d>4  <g b d>2.  <f a c>2.  <f a c>4  <f a c>2.  <f a c>4  <c e g>2.  <c e g>4  <c e g>1  <g b d>1  <g b d>4  <g b d>2.  <f a c>2  <f a c>2 }
 >>
 \layout{}
 \midi{}

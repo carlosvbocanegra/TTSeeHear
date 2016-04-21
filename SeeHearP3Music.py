@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import imageDatadark as im
+import imageDatared as im
 import musicDictionary as md
 from subprocess import call
 import numpy as np
